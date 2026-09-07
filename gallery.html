@@ -1,0 +1,290 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | Explore Ithihaas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cinematic.css">
+    <style>
+        .gal-section { padding: 80px 48px; }
+        .gal-section:nth-child(odd) { background: var(--dark); }
+        .gal-section:nth-child(even) { background: var(--dark-2); }
+        .gal-section-hdr { margin-bottom: 40px; }
+        .gal-section-num { font-family:var(--font-display); font-size:3rem; font-weight:700; color:rgba(184,134,11,0.2); line-height:1; }
+        .gal-section-title { font-family:var(--font-display); font-size:clamp(1.6rem,3vw,2.5rem); font-weight:300; color:var(--text); font-weight:600; margin-bottom:6px; }
+        .gal-section-sub { font-family:var(--font-ui); font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); }
+        .gal-masonry { columns: 4; column-gap: 10px; }
+        .gal-item { break-inside: avoid; margin-bottom: 10px; position:relative; overflow:hidden; cursor:pointer; }
+        .gal-item img { width:100%; display:block; transition:transform 0.7s ease; }
+        .gal-item:hover img { transform:scale(1.06); }
+        .gal-item-overlay {
+            position:absolute; inset:0;
+            background:linear-gradient(to top, rgba(250,248,245,0.9) 0%, transparent 50%);
+            opacity:0; transition:opacity 0.4s;
+            display:flex; align-items:flex-end; padding:16px;
+        }
+        .gal-item:hover .gal-item-overlay { opacity:1; }
+        .gal-item-overlay span { font-family:var(--font-display); font-size:0.75rem; color:var(--text); font-weight:600; }
+
+        /* Lightbox */
+        .lightbox { position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:9999; display:none; align-items:center; justify-content:center; }
+        .lightbox.active { display:flex; }
+        .lightbox img { max-width:90vw; max-height:90vh; object-fit:contain; }
+        .lightbox-close { position:absolute; top:24px; right:32px; font-size:2rem; color:var(--gold); cursor:pointer; background:none; border:none; }
+
+        @media(max-width:900px){ .gal-masonry { columns:2; } }
+        @media(max-width:560px){ .gal-masonry { columns:1; } .gal-section { padding:60px 20px; } }
+    </style>
+</head>
+<body class="cinematic-body">
+
+    <nav class="cin-nav scrolled" id="cin-nav">
+        <div class="cin-nav-inner">
+            <a href="index.html" class="cin-logo"><img src="images/logo_transparent.png" alt="Explore Itihaas" class="logo-img"></a>
+            <ul class="cin-nav-links">
+                <li><a href="index.html">Home</a></li><li><a href="journey.html">Journeys</a></li>
+                <li><a href="why-us.html">Why Us</a></li><li><a href="testimonial.html">Testimonials</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+            </ul>
+            <div class="cin-nav-right"><a href="book-now.html" class="cin-book-btn">Book Now</a></div>
+        </div>
+    </nav>
+
+    <section class="cin-hero" style="height:60vh;">
+        <div class="cin-hero-bg">
+            <img src="images/gallerys14.jpeg" alt="Gallery" class="cin-hero-img" style="transform:scale(1.1);">
+            <div class="cin-hero-overlay"></div>
+        </div>
+        <div class="cin-hero-content" style="opacity:1;transform:none;">
+            <div class="cin-hero-tag" style="opacity:1;transform:none;">Visual Journeys</div>
+            <h1 class="cin-hero-title"><span class="line1" style="opacity:1;transform:none;">The Gallery</span></h1>
+            <p class="cin-hero-sub" style="opacity:1;transform:none;font-style:italic;">Every frame a story. Every stone a civilisation.</p>
+        </div>
+    </section>
+
+    <!-- Kishkinda -->
+    <section class="gal-section">
+        <div class="gal-section-hdr">
+            <div class="gal-section-num">01</div>
+            <h2 class="gal-section-title">Kishkinda</h2>
+            <div class="gal-section-sub">Ramayana � Vijayanagara � Hampi</div>
+        </div>
+        <div class="gal-masonry">
+            <div class="gal-item"><img src="images/galleryk.jpeg" loading="lazy" alt="Kishkinda"><div class="gal-item-overlay"><span>Kishkinda</span></div></div>
+            <div class="gal-item"><img src="images/galleryk1.jpeg" loading="lazy" alt="Kishkinda"><div class="gal-item-overlay"><span>Kishkinda</span></div></div>
+            <div class="gal-item"><img src="images/galleryk2.jpeg" loading="lazy" alt="Kishkinda"><div class="gal-item-overlay"><span>Kishkinda</span></div></div>
+            <div class="gal-item"><img src="images/galleryk3.jpeg" loading="lazy" alt="Kishkinda"><div class="gal-item-overlay"><span>Kishkinda</span></div></div>
+            <div class="gal-item"><img src="images/galleryk4.jpeg" loading="lazy" alt="Kishkinda"><div class="gal-item-overlay"><span>Kishkinda</span></div></div>
+            <div class="gal-item"><img src="images/galleryk5.jpeg" loading="lazy" alt="Kishkinda"><div class="gal-item-overlay"><span>Kishkinda</span></div></div>
+        </div>
+    </section>
+
+    <!-- Kannagi -->
+    <section class="gal-section">
+        <div class="gal-section-hdr">
+            <div class="gal-section-num">02</div>
+            <h2 class="gal-section-title">Kannagi's Path to Justice</h2>
+            <div class="gal-section-sub">Silappadikaram � Ancient Tamil Heritage</div>
+        </div>
+        <div class="gal-masonry">
+            <div class="gal-item"><img src="images/gallerykg1.jpeg" loading="lazy" alt="Kannagi"><div class="gal-item-overlay"><span>Kannagi</span></div></div>
+            <div class="gal-item"><img src="images/gallerykg2.jpeg" loading="lazy" alt="Kannagi"><div class="gal-item-overlay"><span>Kannagi</span></div></div>
+            <div class="gal-item"><img src="images/gallerykg3.jpeg" loading="lazy" alt="Kannagi"><div class="gal-item-overlay"><span>Kannagi</span></div></div>
+            <div class="gal-item"><img src="images/gallerykg4.jpeg" loading="lazy" alt="Kannagi"><div class="gal-item-overlay"><span>Kannagi</span></div></div>
+            <div class="gal-item"><img src="images/gallerykg5.jpeg" loading="lazy" alt="Kannagi"><div class="gal-item-overlay"><span>Kannagi</span></div></div>
+            <div class="gal-item"><img src="images/gallerykg6.jpeg" loading="lazy" alt="Kannagi"><div class="gal-item-overlay"><span>Kannagi</span></div></div>
+        </div>
+    </section>
+
+    <!-- Trichy -->
+    <section class="gal-section">
+        <div class="gal-section-hdr">
+            <div class="gal-section-num">03</div>
+            <h2 class="gal-section-title">Trichy</h2>
+            <div class="gal-section-sub">Sacred Rock Fortress � Temple City</div>
+        </div>
+        <div class="gal-masonry">
+            <div class="gal-item"><img src="images/galleryt1.jpeg" loading="lazy" alt="Trichy"><div class="gal-item-overlay"><span>Trichy</span></div></div>
+            <div class="gal-item"><img src="images/galleryt2.jpeg" loading="lazy" alt="Trichy"><div class="gal-item-overlay"><span>Trichy</span></div></div>
+            <div class="gal-item"><img src="images/galleryt3.jpeg" loading="lazy" alt="Trichy"><div class="gal-item-overlay"><span>Trichy</span></div></div>
+            <div class="gal-item"><img src="images/galleryt4.jpeg" loading="lazy" alt="Trichy"><div class="gal-item-overlay"><span>Trichy</span></div></div>
+        </div>
+    </section>
+
+    <!-- Chola Chronicles -->
+    <section class="gal-section">
+        <div class="gal-section-hdr">
+            <div class="gal-section-num">04</div>
+            <h2 class="gal-section-title">Chola Chronicles</h2>
+            <div class="gal-section-sub">Thanjavur � Kumbakonam � Kaveri</div>
+        </div>
+        <div class="gal-masonry">
+            <div class="gal-item"><img src="images/galleryc.jpeg" loading="lazy" alt="Chola"><div class="gal-item-overlay"><span>Chola</span></div></div>
+            <div class="gal-item"><img src="images/galleryc1.jpeg" loading="lazy" alt="Chola"><div class="gal-item-overlay"><span>Chola</span></div></div>
+            <div class="gal-item"><img src="images/galleryc2.jpeg" loading="lazy" alt="Chola"><div class="gal-item-overlay"><span>Chola</span></div></div>
+            <div class="gal-item"><img src="images/galleryc3.jpeg" loading="lazy" alt="Chola"><div class="gal-item-overlay"><span>Chola</span></div></div>
+            <div class="gal-item"><img src="images/galleryc4.jpeg" loading="lazy" alt="Chola"><div class="gal-item-overlay"><span>Chola</span></div></div>
+            <div class="gal-item"><img src="images/galleryc5.jpeg" loading="lazy" alt="Chola"><div class="gal-item-overlay"><span>Chola</span></div></div>
+        </div>
+    </section>
+
+    <!-- Kumbakonam -->
+    <section class="gal-section">
+        <div class="gal-section-hdr">
+            <div class="gal-section-num">05</div>
+            <h2 class="gal-section-title">Kumbakonam</h2>
+            <div class="gal-section-sub">City of Temples � Sacred Geography</div>
+        </div>
+        <div class="gal-masonry">
+            <div class="gal-item"><img src="images/galleryp.jpeg" loading="lazy" alt="Kumbakonam"><div class="gal-item-overlay"><span>Kumbakonam</span></div></div>
+            <div class="gal-item"><img src="images/galleryp1.jpeg" loading="lazy" alt="Kumbakonam"><div class="gal-item-overlay"><span>Kumbakonam</span></div></div>
+            <div class="gal-item"><img src="images/galleryp2.jpeg" loading="lazy" alt="Kumbakonam"><div class="gal-item-overlay"><span>Kumbakonam</span></div></div>
+            <div class="gal-item"><img src="images/galleryp3.jpeg" loading="lazy" alt="Kumbakonam"><div class="gal-item-overlay"><span>Kumbakonam</span></div></div>
+            <div class="gal-item"><img src="images/galleryp4.jpeg" loading="lazy" alt="Kumbakonam"><div class="gal-item-overlay"><span>Kumbakonam</span></div></div>
+        </div>
+    </section>
+
+    <!-- Charm of Chalukyas -->
+    <section class="gal-section">
+        <div class="gal-section-hdr">
+            <div class="gal-section-num">06</div>
+            <h2 class="gal-section-title">Charm of Chalukyas</h2>
+            <div class="gal-section-sub">Badami � Aihole � Pattadakal</div>
+        </div>
+        <div class="gal-masonry">
+            <div class="gal-item"><img src="images/gallerycc1.jpeg" loading="lazy" alt="Chalukyas"><div class="gal-item-overlay"><span>Chalukyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerycc2.jpeg" loading="lazy" alt="Chalukyas"><div class="gal-item-overlay"><span>Chalukyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerycc3.jpeg" loading="lazy" alt="Chalukyas"><div class="gal-item-overlay"><span>Chalukyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerycc4.jpeg" loading="lazy" alt="Chalukyas"><div class="gal-item-overlay"><span>Chalukyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerycc5.jpeg" loading="lazy" alt="Chalukyas"><div class="gal-item-overlay"><span>Chalukyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerycc6.jpeg" loading="lazy" alt="Chalukyas"><div class="gal-item-overlay"><span>Chalukyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerycc7.jpeg" loading="lazy" alt="Chalukyas"><div class="gal-item-overlay"><span>Chalukyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerycc8.jpeg" loading="lazy" alt="Chalukyas"><div class="gal-item-overlay"><span>Chalukyas</span></div></div>
+            <div class="gal-item"><img src="images/galllerycc9.jpg.jpeg" loading="lazy" alt="Chalukyas"><div class="gal-item-overlay"><span>Chalukyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerycc10.jpeg" loading="lazy" alt="Chalukyas"><div class="gal-item-overlay"><span>Chalukyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerycc11.jpeg" loading="lazy" alt="Chalukyas"><div class="gal-item-overlay"><span>Chalukyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerycc12.jpeg" loading="lazy" alt="Chalukyas"><div class="gal-item-overlay"><span>Chalukyas</span></div></div>
+        </div>
+    </section>
+
+    <!-- Stone Poets of Hoysala -->
+    <section class="gal-section">
+        <div class="gal-section-hdr">
+            <div class="gal-section-num">07</div>
+            <h2 class="gal-section-title">Stone Poets of Hoysala</h2>
+            <div class="gal-section-sub">Belur � Halebidu � Somanathapura</div>
+        </div>
+        <div class="gal-masonry">
+            <div class="gal-item"><img src="images/gallerys.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys1.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys2.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys4.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys5.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys6.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys7.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys8.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys9.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys10.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys11.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys14.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys15.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys16.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys17.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys18.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys19.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys20.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys21.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys22.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+            <div class="gal-item"><img src="images/gallerys23.jpeg" loading="lazy" alt="Hoysala"><div class="gal-item-overlay"><span>Hoysala</span></div></div>
+        </div>
+    </section>
+
+    <!-- Pride of Pandiyas -->
+    <section class="gal-section">
+        <div class="gal-section-hdr">
+            <div class="gal-section-num">08</div>
+            <h2 class="gal-section-title">Pride of Pandiyas</h2>
+            <div class="gal-section-sub">Madurai � Tenkasi � Keezhadi</div>
+        </div>
+        <div class="gal-masonry">
+            <div class="gal-item"><img src="images/gallerypp1.jpeg" loading="lazy" alt="Pandiyas"><div class="gal-item-overlay"><span>Pandiyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerypp2.jpeg" loading="lazy" alt="Pandiyas"><div class="gal-item-overlay"><span>Pandiyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerypp3.jpeg" loading="lazy" alt="Pandiyas"><div class="gal-item-overlay"><span>Pandiyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerypp4.jpeg" loading="lazy" alt="Pandiyas"><div class="gal-item-overlay"><span>Pandiyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerypp5.jpeg" loading="lazy" alt="Pandiyas"><div class="gal-item-overlay"><span>Pandiyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerypp6.jpeg" loading="lazy" alt="Pandiyas"><div class="gal-item-overlay"><span>Pandiyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerypp7.jpeg" loading="lazy" alt="Pandiyas"><div class="gal-item-overlay"><span>Pandiyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerypp8.jpeg" loading="lazy" alt="Pandiyas"><div class="gal-item-overlay"><span>Pandiyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerypp9.jpeg" loading="lazy" alt="Pandiyas"><div class="gal-item-overlay"><span>Pandiyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerypp10.jpeg" loading="lazy" alt="Pandiyas"><div class="gal-item-overlay"><span>Pandiyas</span></div></div>
+            <div class="gal-item"><img src="images/gallerypp11.jpeg" loading="lazy" alt="Pandiyas"><div class="gal-item-overlay"><span>Pandiyas</span></div></div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose">?</button>
+        <img src="" id="lightboxImg" alt="Gallery Image">
+    </div>
+
+    <footer class="cin-footer">
+        <div class="cin-footer-inner">
+            <div class="cin-footer-brand"><h3>Explore Ithihaas</h3><p>Experience Bharat through a completely different lens.</p></div>
+            <div class="cin-footer-links">
+                <a href="index.html">Home</a><a href="journey.html">Journeys</a>
+                <a href="gallery.html">Gallery</a><a href="why-us.html">Why Us</a>
+                <a href="testimonial.html">Testimonials</a><a href="book-now.html">Book Now</a>
+            </div>
+            <div class="cin-footer-copy"><p>&copy; 2026 Explore Ithihaas. All rights reserved.</p></div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/916369643150" class="whatsapp-float" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zM223.9 411.5c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 331.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+    </a>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="backend/backend.js"></script>
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        // Gallery items scroll reveal
+        document.querySelectorAll(".gal-section").forEach(section => {
+            gsap.from(section.querySelectorAll(".gal-item"), {
+                y: 40, opacity: 0, duration: 0.7, stagger: 0.05, ease: "power2.out",
+                scrollTrigger: { trigger: section, start: "top 80%", toggleActions: "play none none none" }
+            });
+        });
+        // Lightbox
+        const lightbox = document.getElementById("lightbox");
+        const lightboxImg = document.getElementById("lightboxImg");
+        document.querySelectorAll(".gal-item img").forEach(img => {
+            img.addEventListener("click", () => {
+                lightboxImg.src = img.src;
+                lightbox.classList.add("active");
+            });
+        });
+        document.getElementById("lightboxClose").addEventListener("click", () => lightbox.classList.remove("active"));
+        lightbox.addEventListener("click", e => { if (e.target === lightbox) lightbox.classList.remove("active"); });
+    </script>
+<script src="effects3d.js"></script><!-- Global Floating Contact Buttons (Phone & WhatsApp) -->
+<div id="static-contact-buttons" style="position:fixed;bottom:28px;right:28px;z-index:9999999;display:flex;gap:14px;align-items:center;pointer-events:auto;">
+    <a href="tel:+916369643150" title="Call Us (+91 6369643150)" style="width:58px;height:58px;background:#D4A840;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(212,168,64,0.65);text-decoration:none;font-size:26px;color:#1A0F0A;transition:transform 0.3s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">📞</a>
+    <a href="https://wa.me/916369643150" target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp" style="width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(37,211,102,0.65);text-decoration:none;transition:transform 0.3s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
