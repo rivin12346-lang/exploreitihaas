@@ -1,0 +1,863 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Ithihaas | Temple Journey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+        <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+        /* ══ KILL GEMINI / BROWSER WATERMARK ══ */
+        /* Target the diamond glow shape and any injected overlay */
+        body > div[style*="z-index: 2147483647"],
+        body > div[style*="z-index:2147483647"],
+        body > div[style*="pointer-events: none"][style*="position: fixed"],
+        body > div[style*="pointer-events:none"][style*="position:fixed"],
+        [id^="gemini"],[class^="gemini"],
+        [id*="watermark"],[class*="watermark"],
+        [id*="Watermark"],[class*="Watermark"],
+        [id*="overlay-badge"],[class*="overlay-badge"],
+        [data-id*="gemini"],
+        div[aria-label*="Gemini"],
+        #agy-watermark, .agy-watermark,
+        #gemini-watermark, .gemini-watermark {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+        html.locked{overflow:hidden;}
+        body{background:#F5EBE1;color:#2C1A12;font-family:'Outfit',sans-serif;overflow-x:hidden;}
+
+        /* NAV */
+        nav{position:fixed;top:0;left:0;width:100%;z-index:2000;display:flex;justify-content:space-between;align-items:center;padding:12px 48px;background:rgba(250,248,245,0.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(184,134,11,0.2);opacity:0;pointer-events:none;transition:opacity 0.6s;}
+        nav.show{opacity:1;pointer-events:all;}
+        nav img{height:52px;width:auto;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.2));}
+        .nav-links{display:flex;gap:28px;list-style:none;}
+        .nav-links a{font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(44,26,18,0.7);text-decoration:none;transition:color 0.3s;}
+        .nav-links a:hover{color:#B8860B;}
+        .nav-book{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;background:#B8860B;color:#FFF;padding:10px 22px;text-decoration:none;border-radius:2px;font-weight:500;}
+        .nav-book:hover{background:#D4AF37;}
+
+        /* ═══ GATE OVERLAY ═══ */
+        #gate-overlay{
+            position:fixed;inset:0;z-index:1500;
+            display:flex;align-items:center;justify-content:center;
+            background:#F5EBE1;cursor:pointer;
+        }
+        .gate-container{position:relative;width:100vw;height:100vh;perspective:1200px;overflow:hidden;}
+        .gate-door{position:absolute;top:0;width:50%;height:100%;overflow:hidden;will-change:transform;}
+        .gate-door.left{left:0;transform-origin:left center;}
+        .gate-door.right{right:0;transform-origin:right center;}
+        .gate-door img{position:absolute;top:50%;height:100vh;width:auto;min-width:100%;object-fit:cover;filter:saturate(1.1) brightness(1.1);transform:translateY(-50%);}
+        .gate-door.left img{right:0;object-position:right center;}
+        .gate-door.right img{left:0;object-position:left center;}
+        .gate-seam{position:absolute;top:0;bottom:0;left:50%;width:3px;transform:translateX(-50%);z-index:5;background:linear-gradient(to bottom,transparent 3%,rgba(212,168,64,0.9) 25%,rgba(255,220,80,1) 50%,rgba(212,168,64,0.9) 75%,transparent 97%);box-shadow:0 0 25px rgba(212,168,64,0.5),0 0 80px rgba(212,168,64,0.2);animation:seamGlow 2s ease-in-out infinite;}
+        @keyframes seamGlow{0%,100%{opacity:0.6;box-shadow:0 0 15px rgba(212,168,64,0.3);}50%{opacity:1;box-shadow:0 0 40px rgba(212,168,64,0.7),0 0 100px rgba(212,168,64,0.3);}}
+        .gate-light{position:absolute;inset:0;z-index:1;background:radial-gradient(circle,rgba(255,255,255,0.9) 0%,rgba(255,248,220,0.6) 35%,transparent 65%);opacity:0;}
+        .gate-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;text-align:center;width:min(520px,65vw);}
+        .gate-text img{max-height:150px;margin-bottom:16px;filter:drop-shadow(0 0 30px rgba(255,255,255,0.6)) drop-shadow(0 4px 15px rgba(0,0,0,0.2));}
+        .gate-text h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,3rem);font-weight:400;color:#1A0F0A;line-height:1.2;margin-bottom:14px;text-shadow:0 1px 0 rgba(255,255,255,0.8),0 2px 4px rgba(0,0,0,0.2);}
+        .gate-text .prompt{font-size:0.7rem;letter-spacing:0.4em;text-transform:uppercase;color:#B8860B;animation:pulse 2.5s ease-in-out infinite;}
+        .gate-text .prompt-icon{font-size:2.2rem;margin-bottom:10px;display:block;animation:pulse 2.5s ease-in-out infinite;}
+        @keyframes pulse{0%,100%{opacity:0.5;transform:scale(1);}50%{opacity:1;transform:scale(1.06);}}
+
+                /* Suppress any external watermarks or injected overlays */
+        [class*="gemini"],[id*="gemini"],[class*="watermark"],[id*="watermark"],
+        [class*="branding"],[class*="powered-by"],[class*="badge"]{
+            display:none !important;opacity:0 !important;visibility:hidden !important;
+        }
+        /* Gate particles */
+        #gate-particles{position:absolute;inset:0;z-index:0;pointer-events:none;}
+
+        /* ═══ VIEWPORT ═══ */
+        #viewport{position:fixed;inset:0;perspective:1200px;overflow:hidden;}
+        #camera{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform;}
+        .scene{position:absolute;inset:0;transform-style:preserve-3d;display:flex;align-items:center;justify-content:center;}
+
+        /* Hero */
+        .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 0%,rgba(255,250,240,0.9) 0%,transparent 65%),radial-gradient(ellipse at 50% 100%,rgba(240,230,215,0.8) 0%,transparent 60%),radial-gradient(ellipse at 50% 50%,rgba(255,255,255,0.8) 0%,#F5EBE1 75%);}
+        .hero-text{position:relative;z-index:10;text-align:center;width:min(620px,55vw);transform:translateZ(200px);}
+        .hero-text img.logo{max-height:155px;width:auto;margin-bottom:16px;filter:drop-shadow(0 0 30px rgba(255,255,255,0.6)) drop-shadow(0 4px 15px rgba(0,0,0,0.2));}
+        .hero-tag{font-size:0.6rem;letter-spacing:0.5em;text-transform:uppercase;color:#B8860B;margin-bottom:14px;display:block;}
+        .hero-text h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.8rem);font-weight:400;color:#1A0F0A;line-height:1.15;margin-bottom:16px;text-shadow:0 1px 0 rgba(255,255,255,0.8),0 3px 6px rgba(0,0,0,0.1);}
+        .hero-text p{font-size:0.92rem;color:rgba(44,26,18,0.8);font-style:italic;line-height:1.85;margin-bottom:24px;}
+        .gold-divider{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:24px;}
+        .gold-divider::before,.gold-divider::after{content:'';flex:1;max-width:80px;height:1px;background:linear-gradient(to right,transparent,#B8860B,transparent);}
+        .gold-divider span{font-size:0.56rem;letter-spacing:0.4em;text-transform:uppercase;color:#B8860B;white-space:nowrap;}
+        .hero-cta{display:inline-block;font-size:0.7rem;letter-spacing:0.22em;text-transform:uppercase;color:#FFF;background:#B8860B;padding:13px 34px;text-decoration:none;border-radius:2px;font-weight:500;box-shadow:0 8px 25px rgba(0,0,0,0.15),0 0 20px rgba(212,168,64,0.2);transition:all 0.35s;}
+        .hero-cta:hover{background:#D4AF37;transform:translateY(-3px);}
+
+        /* Particles layer */
+        #hero-particles{position:absolute;inset:0;z-index:1;pointer-events:none;}
+        .particle{position:absolute;border-radius:50%;background:#B8860B;box-shadow:0 0 6px 1px rgba(212,168,64,0.3);opacity:0;animation:floatP linear infinite;}
+        @keyframes floatP{0%{transform:translateY(100vh) scale(0);opacity:0;}15%{opacity:0.6;}85%{opacity:0.3;}100%{transform:translateY(-5vh) scale(0.4);opacity:0;}}
+
+        /* ═══ TIME TUNNEL ELEMENTS ═══ */
+        .time-ring{position:absolute;top:50%;left:50%;border:2px solid rgba(184,134,11,0.12);border-radius:50%;box-shadow:0 0 40px rgba(184,134,11,0.08),inset 0 0 40px rgba(184,134,11,0.04);}
+        .warp-streak{position:absolute;top:50%;left:50%;width:2px;background:linear-gradient(to bottom,transparent,rgba(184,134,11,0.4),transparent);}
+
+        /* Travel badge */
+        .travel-badge{position:absolute;top:8%;left:50%;transform:translateX(-50%) translateZ(420px);z-index:15;display:flex;align-items:center;gap:12px;padding:10px 28px;background:rgba(250,248,245,0.92);backdrop-filter:blur(12px);border:1px solid rgba(184,134,11,0.25);border-radius:30px;font-size:0.58rem;letter-spacing:0.3em;text-transform:uppercase;color:#B8860B;box-shadow:0 10px 30px rgba(0,0,0,0.1);}
+        .travel-badge .icon{font-size:1.3rem;}
+
+        /* Destination frames */
+        .frame{position:relative;width:74vw;height:70vh;max-width:1080px;border-radius:4px;box-shadow:0 25px 60px rgba(0,0,0,0.2),0 0 0 1px rgba(184,134,11,0.15);background:#FAF8F5;transform-style:preserve-3d;overflow:hidden;}
+        .frame img{width:100%;height:100%;object-fit:cover;border-radius:4px;}
+        .text-content{position:absolute;bottom:0;left:0;right:0;transform:translateZ(400px);background:linear-gradient(to top,rgba(250,248,245,0.98) 0%,rgba(250,248,245,0.85) 65%,transparent 100%);padding:55px 44px 34px;}
+        .tag{font-size:0.58rem;letter-spacing:0.42em;text-transform:uppercase;color:#B8860B;margin-bottom:8px;display:block;}
+        h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:400;color:#1A0F0A;line-height:1.15;margin-bottom:10px;}
+        .dest-p{font-size:0.88rem;color:rgba(44,26,18,0.8);line-height:1.85;font-style:italic;margin-bottom:16px;max-width:500px;}
+        .explore-btn{display:inline-block;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:#FFF;background:#B8860B;padding:10px 24px;text-decoration:none;border-radius:2px;font-weight:500;transition:all 0.3s;}
+        .explore-btn:hover{background:#D4AF37;transform:translateY(-2px);}
+
+        /* End */
+        .end-screen{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;text-align:center;transform:translateZ(200px);}
+        .end-screen h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4.5vw,4rem);font-weight:400;color:#1A0F0A;margin-bottom:22px;}
+
+        @media(max-width:768px){
+            .nav-links{display:none;}
+            .hero-text{width:78vw;}
+            .hero-text h1{font-size:1.8rem;}
+            .travel-badge{font-size:0.5rem;padding:8px 16px;}
+            .gate-text{width:85vw;}
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ GATE OVERLAY ═══ -->
+<div id="gate-overlay">
+    <div class="gate-container">
+        <div class="gate-light" id="gateLight"></div>
+        <div id="gate-particles"></div>
+        <div class="gate-door left" id="doorL"><img src="../images/gate_left.png" alt="Left Gate"></div>
+        <div class="gate-seam" id="gateSeam"></div>
+        <div class="gate-door right" id="doorR"><img src="../images/gate_right.png" alt="Right Gate"></div>
+        <div class="gate-text" id="gateText">
+            <img src="../images/logo_transparent.png" alt="Ithihaas">
+            <h1>Enter the Temple<br>of Time</h1>
+            <div class="prompt-icon">🙏</div>
+            <p class="prompt">Touch to Enter</p>
+        </div>
+    </div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+    <a href="index.html"><img src="../images/logo_transparent.png" alt="Explore Ithihaas"></a>
+    <ul class="nav-links">
+        <li><a href="journey.html">Journeys</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="why-us.html">Why Us</a></li>
+        <li><a href="testimonial.html">Testimonials</a></li>
+    </ul>
+    <a href="book-now.html" class="nav-book">Book Now</a>
+</nav>
+
+<!-- 3D VIEWPORT -->
+<div id="viewport">
+  <div id="camera">
+
+    <!-- SCENE 0: HERO -->
+    <div class="scene" style="transform:translateZ(0px);">
+        <div class="hero-bg"></div>
+        <div id="hero-particles"></div>
+        <div class="hero-text" id="heroText">
+            <img class="logo" src="../images/logo_transparent.png" alt="Explore Ithihaas">
+            <span class="hero-tag">Story Driven Heritage Tours</span>
+            <h1>Journey Through<br>Timeless Temples</h1>
+            <p>Experience the history, architecture and spirituality<br>of India's greatest civilisations</p>
+            <div class="gold-divider"><span>Discover · Explore · Experience</span></div>
+            <a href="journey.html" class="hero-cta">Begin Your Journey</a>
+        </div>
+        
+    </div>
+
+    <!-- TUNNEL ZONE (fills gaps with rings + streaks) -->
+    <div class="scene" style="transform:translateZ(-2000px);" id="tunnelZone"></div>
+
+    <!-- DEST 1: By Train -->
+    <div class="scene" style="transform:translateZ(-4500px);">
+        <div class="travel-badge"><span class="icon">🚂</span> Travelling by Heritage Train</div>
+        <div class="frame"><img src="../images/hampi_landscape.jpg" alt="Hampi">
+            <div class="text-content">
+                <span class="tag">Destination 01</span>
+                <h2>Kishkinda Kanda</h2>
+                <p class="dest-p">Walk through the very land where Rama met Hanuman. The boulder-strewn landscape of ancient Kishkinda.</p>
+                <a href="journey.html" class="explore-btn">Enter Location</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEST 2: By Flight -->
+    <div class="scene" style="transform:translateZ(-8000px);">
+        <div class="travel-badge"><span class="icon">✈️</span> Travelling by Flight</div>
+        <div class="frame"><img src="../images/gallerykg2.jpeg" alt="Kannagi">
+            <div class="text-content">
+                <span class="tag">Destination 02</span>
+                <h2>Kannagi's Path</h2>
+                <p class="dest-p">Follow the trail of Tamil literature's immortal heroine through ancient port cities and sacred river towns.</p>
+                <a href="journey.html" class="explore-btn">Enter Location</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEST 3: By Boat -->
+    <div class="scene" style="transform:translateZ(-11500px);">
+        <div class="travel-badge"><span class="icon">⛵</span> Travelling by Ancient Boat</div>
+        <div class="frame"><img src="../images/galleryc1.jpeg" alt="Chola">
+            <div class="text-content">
+                <span class="tag">Destination 03</span>
+                <h2>Chola Chronicles</h2>
+                <p class="dest-p">Step into the world of the greatest empire of medieval South India — power, devotion and beauty.</p>
+                <a href="journey.html" class="explore-btn">Enter Location</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEST 4: By Chariot -->
+    <div class="scene" style="transform:translateZ(-15000px);">
+        <div class="travel-badge"><span class="icon">🏇</span> Travelling by Royal Chariot</div>
+        <div class="frame"><img src="../images/gallerys6.jpeg" alt="Hoysala">
+            <div class="text-content">
+                <span class="tag">Destination 04</span>
+                <h2>Stone Poets of Hoysala</h2>
+                <p class="dest-p">Marvel at the most intricate stone carvings ever produced by human hands. Temples that are poetry in stone.</p>
+                <a href="journey.html" class="explore-btn">Enter Location</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEST 5: By Train -->
+    <div class="scene" style="transform:translateZ(-18500px);">
+        <div class="travel-badge"><span class="icon">🚂</span> Travelling by Heritage Train</div>
+        <div class="frame"><img src="../images/gallerycc4.jpeg" alt="Chalukyas">
+            <div class="text-content">
+                <span class="tag">Destination 05</span>
+                <h2>Charm of Chalukyas</h2>
+                <p class="dest-p">Witness the birth of Deccan temple architecture — rock-cut shrines that laid the foundation for all that followed.</p>
+                <a href="journey.html" class="explore-btn">Enter Location</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- END -->
+    <div class="scene" style="transform:translateZ(-22000px);">
+        <div class="end-screen">
+            <span class="tag">Your Journey Awaits</span>
+            <h1>Begin Your Story</h1>
+            <a href="journey.html" class="explore-btn" style="margin-top:18px;">Explore All Journeys</a>
+        </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="../backend/backend.js"></script>
+<script>
+    // ══ KILL GEMINI WATERMARK - MutationObserver removes it instantly when injected ══
+    (function removeWatermark() {
+        function killNode(node) {
+            if (!node || !node.style) return;
+            const idStr = (node.id || "").toLowerCase();
+            const clsStr = (node.className || "").toLowerCase();
+            if (idStr.includes("contact") || idStr.includes("whatsapp") || idStr.includes("call") || idStr.includes("phone") || idStr.includes("float") || clsStr.includes("contact")) return;
+            if (!node || !node.style) return;
+            const s = node.style;
+            const isFixed = s.position === 'fixed' || s.position === 'absolute';
+            const isHighZ  = parseInt(s.zIndex) > 9000;
+            const isNoPtr  = s.pointerEvents === 'none';
+            const id   = (node.id   || '').toLowerCase();
+            const cls  = (node.className || '').toLowerCase();
+            const isGemini = id.includes('gemini') || cls.includes('gemini') ||
+                             id.includes('watermark') || cls.includes('watermark') ||
+                             id.includes('agy') || cls.includes('agy');
+            if (isGemini || (isFixed && isHighZ && isNoPtr)) {
+                node.remove();
+            }
+        }
+
+        const obs = new MutationObserver(muts => {
+            muts.forEach(m => m.addedNodes.forEach(n => {
+                if (n.nodeType === 1) {
+                    killNode(n);
+                    n.querySelectorAll && n.querySelectorAll('*').forEach(killNode);
+                }
+            }));
+        });
+        obs.observe(document.documentElement, { childList: true, subtree: true });
+
+        // Also run immediately on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('body > div').forEach(killNode);
+        });
+    })();
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Lock scroll until gate opens
+    document.documentElement.classList.add('locked');
+
+    // ═══ GATE PARTICLES ═══
+    const gp = document.getElementById('gate-particles');
+    for (let i = 0; i < 30; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const sz = Math.random() * 3 + 1;
+        p.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}vw;animation-duration:${Math.random()*10+8}s;animation-delay:-${Math.random()*10}s;`;
+        gp.appendChild(p);
+    }
+
+    // ═══ TOUCH TO ENTER — GATE OPEN ═══
+    let gateOpen = false;
+    // AUTO OPEN GATE on page load
+    setTimeout(function() {
+        if (gateOpen) return;
+        gateOpen = true;
+
+        const overlay = document.getElementById('gate-overlay');
+        const tl = gsap.timeline();
+
+        // Fade prompt
+        tl.to('#gateText', { opacity: 0, y: -30, duration: 0.3, ease: 'power2.in' });
+
+        // Glow intensifies
+        tl.to('#gateLight', { opacity: 1, duration: 0.4, ease: 'power2.out' }, '-=0.3');
+        tl.to('#gateSeam', { width: '12px', boxShadow: '0 0 80px rgba(255,220,50,1), 0 0 200px rgba(212,168,64,0.6)', duration: 0.3 }, '-=0.6');
+
+        // Doors swing open smoothly
+        tl.to('#doorL', { rotateY: -115, duration: 1.4, ease: 'power2.inOut' }, '-=0.2');
+        tl.to('#doorR', { rotateY: 115, duration: 1.4, ease: 'power2.inOut' }, '<');
+
+        // Light flood and overlay fade
+        tl.to('#gateLight', { opacity: 0, scale: 4, duration: 0.6, ease: 'power2.in' }, '-=1.2');
+        tl.to(overlay, { opacity: 0, duration: 0.5, ease: 'power2.out', onComplete: () => {
+            overlay.style.display = 'none';
+            document.documentElement.classList.remove('locked');
+            document.getElementById('mainNav').classList.add('show');
+            showHeroScreen();
+        }}, '-=0.6');
+    });
+
+    // ═══ AUTO CINEMATIC CAMERA FLIGHT ═══
+    // No scrolling needed — camera flies automatically like a video
+    document.body.style.height = '100vh';
+    document.body.style.overflow = 'hidden';
+
+    // ═══ BUILD CONTINUOUS TIME TUNNEL ═══
+    const tz = document.getElementById('tunnelZone');
+
+    // 50 rings spread along ENTIRE tunnel depth
+    for (let i = 0; i < 50; i++) {
+        const ring = document.createElement('div');
+        ring.className = 'time-ring';
+        const size = 1100 + Math.random() * 500;
+        Object.assign(ring.style, {
+            width: size + 'px', height: size + 'px',
+            marginLeft: (-size/2) + 'px', marginTop: (-size/2) + 'px',
+            transform: `translateZ(${-(i * 450)}px)`,
+            opacity: Math.max(0.1, 0.6 - i * 0.01)
+        });
+        tz.appendChild(ring);
+    }
+
+    // 180 warp streaks fill the entire tunnel
+    for (let i = 0; i < 180; i++) {
+        const s = document.createElement('div');
+        s.className = 'warp-streak';
+        const angle = Math.random() * Math.PI * 2;
+        const r = Math.random() * 550 + 80;
+        const x = Math.cos(angle) * r;
+        const y = Math.sin(angle) * r;
+        const len = Math.random() * 500 + 150;
+        Object.assign(s.style, {
+            height: len + 'px', opacity: '0',
+            transform: `translate3d(${x}px, ${y}px, -22000px) rotateX(90deg)`,
+            transformOrigin: 'top center'
+        });
+        tz.appendChild(s);
+        s.animate([
+            { transform: `translate3d(${x}px, ${y}px, -22000px) rotateX(90deg)`, opacity: 0 },
+            { opacity: 0.65, offset: 0.5 },
+            { transform: `translate3d(${x}px, ${y}px, 2000px) rotateX(90deg)`, opacity: 0 }
+        ], { duration: (Math.random()*3+2)*1000, iterations: Infinity, delay: Math.random()*-5000, easing: 'linear' });
+    }
+
+    // Temple artifacts flying through
+    const arts = ['🛕','📜','🕯️','🕉️','🔔','🏵️','🪔','⚱️'];
+    for (let i = 0; i < 25; i++) {
+        const a = document.createElement('div');
+        const angle = Math.random() * Math.PI * 2;
+        const r = Math.random() * 450 + 120;
+        const x = Math.cos(angle) * r;
+        const y = Math.sin(angle) * r;
+        Object.assign(a.style, {
+            position: 'absolute', top: '50%', left: '50%',
+            fontSize: (Math.random()*30+22) + 'px',
+            filter: 'drop-shadow(0 0 10px rgba(212,168,64,0.5))',
+            opacity: '0'
+        });
+        a.innerText = arts[Math.floor(Math.random()*arts.length)];
+        tz.appendChild(a);
+        a.animate([
+            { transform: `translate3d(${x}px, ${y}px, -22000px) rotate(0deg)`, opacity: 0 },
+            { opacity: 0.6, offset: 0.5 },
+            { transform: `translate3d(${x}px, ${y}px, 2000px) rotate(${Math.random()*360}deg)`, opacity: 0 }
+        ], { duration: (Math.random()*8+5)*1000, iterations: Infinity, delay: Math.random()*-8000, easing: 'linear' });
+    }
+
+    // ═══ HERO PARTICLES ═══
+    const hp = document.getElementById('hero-particles');
+    for (let i = 0; i < 40; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const sz = Math.random() * 3 + 1;
+        p.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}vw;animation-duration:${Math.random()*10+8}s;animation-delay:-${Math.random()*12}s;`;
+        hp.appendChild(p);
+    }
+
+        // ═══ SHOW 3D ANIMATED KRISHNA BANNER AFTER GATE OPENS ═══
+    function showHeroScreen() {
+        const screen  = document.getElementById('hero-screen');
+        const btn     = document.getElementById('startJourneyBtn');
+        const imgWrap = document.getElementById('hero-banner-img-wrap');
+        const content = document.getElementById('hero-banner-content');
+        const bannerImg = document.getElementById("hero-banner-img"); const bannerBlur = document.getElementById("hero-banner-img-blur");
+        const sunHalo   = document.getElementById('sun-halo');
+        const moonHalo  = document.getElementById('night-moon-halo'); const moonDisc = document.getElementById('night-moon-disc'); const moonShadows = document.getElementById('night-moonlight-shadows');
+
+        screen.style.display = 'flex';
+        screen.style.opacity = '0';
+        screen.style.transition = 'opacity 1.2s ease';
+        setTimeout(() => { screen.style.opacity = '1'; }, 50);
+
+        if (window.gsap) gsap.killTweensOf('#camera');
+
+        // ── 1. 3D FLYING BUTTERFLIES ANIMATION CANVAS ──
+        init3DButterfliesCanvas();
+
+        // ── 2. GOLDEN DUST / NIGHT FIREFLIES PARTICLES ──
+        initGoldenDustCanvas();
+
+        // ── 3. DOUBLE TAP / DOUBLE CLICK TO TOGGLE NIGHT VIBE ──
+        let isNightMode = false;
+        let lastTapTime = 0;
+
+        function toggleNightVibe() {
+            isNightMode = !isNightMode;
+
+            if (isNightMode) {
+                // Night Vibe Active
+                screen.classList.add('night-vibe-active');
+                if (bannerImg) bannerImg.style.filter = "brightness(0.45) contrast(1.28) hue-rotate(185deg) saturate(1.5)"; if (bannerBlur) bannerBlur.style.filter = "blur(35px) brightness(0.35) contrast(1.28) hue-rotate(185deg) saturate(1.5)";
+                if (sunHalo)   sunHalo.style.opacity = '0';
+                if (moonHalo)  moonHalo.style.opacity = '1';
+
+                showToast('🌙 Night Vibe Active — Double tap to return to Golden Sunset');
+            } else {
+                // Return to Golden Sunset
+                screen.classList.remove('night-vibe-active');
+                if (bannerImg) bannerImg.style.filter = "brightness(0.95) contrast(1.05) saturate(1.15)"; if (bannerBlur) bannerBlur.style.filter = "blur(35px) brightness(0.7) saturate(1.2)";
+                if (sunHalo)   sunHalo.style.opacity = '1';
+                if (moonHalo)  moonHalo.style.opacity = '0';
+
+                showToast('☀️ Golden Sunset Active — Double tap for Night Vibe');
+            }
+        }
+
+        // Mouse double click
+        screen.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            toggleNightVibe();
+        });
+
+        // Touch double tap (for mobile)
+        screen.addEventListener('touchend', (e) => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTapTime;
+            if (tapLength < 300 && tapLength > 0) {
+                e.preventDefault();
+                toggleNightVibe();
+            }
+            lastTapTime = currentTime;
+        });
+
+        // Floating Toast Notification
+        function showToast(msg) {
+            let toast = document.getElementById('night-vibe-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'night-vibe-toast';
+                Object.assign(toast.style, {
+                    position: 'fixed', top: '90px', left: '50%',
+                    transform: 'translateX(-50%) translateY(-20px)',
+                    background: 'rgba(20,10,30,0.85)',
+                    color: '#F5DCA3',
+                    padding: '10px 24px',
+                    borderRadius: '30px',
+                    fontSize: '0.75rem',
+                    fontFamily: "'Outfit', sans-serif",
+                    letterSpacing: '0.15em',
+                    boxShadow: '0 8px 30px rgba(0,0,0,0.6), 0 0 20px rgba(184,134,11,0.4)',
+                    border: '1px solid rgba(212,168,64,0.3)',
+                    zIndex: '2000',
+                    opacity: '0',
+                    transition: 'all 0.4s ease',
+                    pointerEvents: 'none'
+                });
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(-20px)';
+            }, 3500);
+        }
+
+        // Show initial prompt after gate opens
+        setTimeout(() => {
+            showToast('✨ Double tap screen to switch to Night Vibe 🌙');
+        }, 1500);
+
+        // ── 4. STATIONARY PICTURE BANNER (Cursor tilt disabled) ──
+        // Picture remains completely steady and stationary when moving cursor
+
+        // Button redirect with fade
+        btn.addEventListener('click', () => {
+            btn.innerHTML = '✨ &nbsp; Entering the Journey...';
+            btn.style.pointerEvents = 'none';
+            if (window.gsap) {
+                gsap.to(screen, {
+                    opacity: 0, duration: 1.2, ease: 'power2.in',
+                    onComplete: () => { window.location.href = 'journey.html'; }
+                });
+            } else {
+                screen.style.opacity = '0';
+                setTimeout(() => { window.location.href = 'journey.html'; }, 1000);
+            }
+        });
+
+        // Particle particle renderer respects night mode
+        window.isNightVibe = () => isNightMode;
+    }
+
+    // ═══ 3D FLYING BUTTERFLIES CANVAS ENGINE ═══
+    function init3DButterfliesCanvas() {
+        const canvas = document.getElementById('butterflies-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        function resize() {
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        // Vibrant fluttering butterflies floating gracefully across the sunset sky
+        const colors = [
+            { main: '#FFD700', edge: '#FF8C00' }, // Golden Amber
+            { main: '#FFA500', edge: '#E65100' }, // Saffron Orange
+            { main: '#FFF8DC', edge: '#DAA520' }, // Ethereal Yellow
+            { main: '#FF7F50', edge: '#8B0000' }  // Coral Red
+        ];
+
+        const butterflies = Array.from({ length: 30 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height * 0.65 + canvas.height * 0.1,
+            scale: Math.random() * 0.5 + 0.35,
+            speedX: (Math.random() - 0.35) * 1.3,
+            speedY: (Math.random() - 0.5) * 0.7,
+            wingPhase: Math.random() * Math.PI * 2,
+            wingSpeed: Math.random() * 0.18 + 0.12,
+            waveFreq: Math.random() * 0.02 + 0.01,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: Math.random() * 0.55 + 0.45
+        }));
+
+        function drawButterfly(b) {
+            ctx.save();
+            const waveY = Math.sin(Date.now() * b.waveFreq) * 12;
+            ctx.translate(b.x, b.y + waveY);
+            ctx.scale(b.scale, b.scale);
+            ctx.globalAlpha = b.alpha;
+
+            const wingScale = Math.abs(Math.sin(b.wingPhase));
+
+            // Butterfly body (dark brown center)
+            ctx.fillStyle = '#1A0C02';
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 2.5, 9, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Antennae
+            ctx.strokeStyle = '#1A0C02';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(-1, -7); ctx.quadraticCurveTo(-5, -13, -7, -15);
+            ctx.moveTo(1, -7);  ctx.quadraticCurveTo(5, -13, 7, -15);
+            ctx.stroke();
+
+            // Left Wing
+            ctx.save();
+            ctx.scale(wingScale, 1);
+            ctx.beginPath();
+            ctx.fillStyle = b.color.main;
+            ctx.strokeStyle = b.color.edge;
+            ctx.lineWidth = 1.2;
+            ctx.moveTo(0, -2);
+            ctx.bezierCurveTo(-15, -18, -25, -5, -16, 4);
+            ctx.bezierCurveTo(-10, 8, -2, 4, 0, 0);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.fillStyle = b.color.edge;
+            ctx.moveTo(0, 1);
+            ctx.bezierCurveTo(-14, 6, -18, 16, -8, 18);
+            ctx.bezierCurveTo(-2, 18, -1, 10, 0, 3);
+            ctx.fill();
+            ctx.restore();
+
+            // Right Wing
+            ctx.save();
+            ctx.scale(-wingScale, 1);
+            ctx.beginPath();
+            ctx.fillStyle = b.color.main;
+            ctx.strokeStyle = b.color.edge;
+            ctx.lineWidth = 1.2;
+            ctx.moveTo(0, -2);
+            ctx.bezierCurveTo(-15, -18, -25, -5, -16, 4);
+            ctx.bezierCurveTo(-10, 8, -2, 4, 0, 0);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.fillStyle = b.color.edge;
+            ctx.moveTo(0, 1);
+            ctx.bezierCurveTo(-14, 6, -18, 16, -8, 18);
+            ctx.bezierCurveTo(-2, 18, -1, 10, 0, 3);
+            ctx.fill();
+            ctx.restore();
+
+            ctx.restore();
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            butterflies.forEach(b => {
+                b.x += b.speedX;
+                b.y += b.speedY;
+                b.wingPhase += b.wingSpeed;
+
+                if (b.x < -30) b.x = canvas.width + 30;
+                if (b.x > canvas.width + 30) b.x = -30;
+                if (b.y < -30) b.y = canvas.height * 0.7;
+                if (b.y > canvas.height * 0.75) b.y = 30;
+
+                drawButterfly(b);
+            });
+            requestAnimationFrame(render);
+        }
+        render();
+    }
+
+    // ═══ GOLDEN DUST & MIST PARTICLES CANVAS ENGINE ═══
+    function initGoldenDustCanvas() {
+        const canvas = document.getElementById('hero-particles-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        function resize() {
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        // Golden dust motes & sacred sparks
+        const motes = Array.from({ length: 50 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 2.2 + 0.6,
+            speedY: -Math.random() * 0.45 - 0.15,
+            speedX: (Math.random() - 0.5) * 0.3,
+            alpha: Math.random() * 0.7 + 0.2,
+            pulseSpeed: Math.random() * 0.03 + 0.01
+        }));
+
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            motes.forEach(m => {
+                m.y += m.speedY;
+                m.x += m.speedX;
+                m.alpha += Math.sin(Date.now() * m.pulseSpeed) * 0.01;
+
+                if (m.y < -10) {
+                    m.y = canvas.height + 10;
+                    m.x = Math.random() * canvas.width;
+                }
+
+                ctx.beginPath();
+                ctx.arc(m.x, m.y, m.radius, 0, Math.PI * 2);
+                ctx.fillStyle = (window.isNightVibe && window.isNightVibe()) ? `rgba(180, 220, 255, ${Math.max(0.2, Math.min(0.9, m.alpha))})` : `rgba(255, 215, 120, ${Math.max(0.1, Math.min(0.85, m.alpha))})`;
+                ctx.shadowColor = (window.isNightVibe && window.isNightVibe()) ? '#A0C8FF' : '#FFD700';
+                ctx.shadowBlur = 8;
+                ctx.fill();
+            });
+            requestAnimationFrame(render);
+        }
+        render();
+    }
+</script>
+
+<!-- ═══ HERO SCREEN (shown after gate opens) ═══ -->
+<!-- ═══ 3D ANIMATED HERO BANNER (Full-Screen Krishna Temple Sunset) ═══ -->
+<div id="hero-screen" style="
+    position:fixed;inset:0;width:100vw;height:100vh;z-index:1200;display:none;align-items:center;justify-content:center;
+    background:#0b0603;overflow:hidden;perspective:1000px;
+">
+    <!-- Layer 1: Base Krishna Temple Image (UTILIZES 100% ALL SCREEN SPACE - FULL EDGE-TO-EDGE COVER) -->
+    <div id="hero-banner-img-wrap" style="
+        position:absolute;inset:0;width:100vw;height:100vh;
+        transform-style:preserve-3d;transition:transform 0.4s ease-out;
+    ">
+        <img id="hero-banner-img" src="../images/krishna_banner.jpg" alt="Krishna Temple Sunset" style="
+            width:100vw;height:100vh;min-width:100vw;min-height:100vh;
+            object-fit:cover;object-position:center center;
+            filter:brightness(0.95) contrast(1.06) saturate(1.18);
+            animation: slowBreathe 18s ease-in-out infinite alternate;
+            transition: filter 1.2s ease;
+        ">
+
+        <!-- 3D Sunburst Glow behind temple -->
+        <div id="sun-halo" style="
+            position:absolute;top:32%;left:52%;transform:translate(-50%,-50%);
+            width:450px;height:450px;
+            background:radial-gradient(circle, rgba(255,200,60,0.5) 0%, rgba(255,140,20,0.2) 45%, transparent 70%);
+            border-radius:50%;filter:blur(25px);pointer-events:none;
+            animation: sunPulse 4s ease-in-out infinite alternate;
+            transition: opacity 1.2s ease;
+        "></div>
+
+        <!-- 3D Night Moon Halo (active in Night Vibe) -->
+        <div id="night-moon-halo" style="
+            position:absolute;top:30%;left:52%;transform:translate(-50%,-50%);
+            width:480px;height:480px;
+            background:radial-gradient(circle, rgba(200,230,255,0.75) 0%, rgba(100,160,255,0.35) 40%, rgba(40,80,180,0.1) 65%, transparent 80%);
+            border-radius:50%;filter:blur(20px);pointer-events:none;
+            opacity:0;transition:opacity 1.2s ease;
+            animation: moonPulse 5s ease-in-out infinite alternate;
+        "></div>
+
+        <!-- 3D Floating Scarf / Red Dupatta Wave Distortion Overlays -->
+        <div class="scarf-wave wave-left"></div>
+        <div class="scarf-wave wave-right"></div>
+    </div>
+
+    <!-- Layer 2: 3D Flying Birds Canvas Overlay -->
+    <canvas id="butterflies-canvas" style="
+        position:absolute;inset:0;width:100%;height:100%;
+        pointer-events:none;z-index:3;
+    "></canvas>
+
+    <!-- Layer 3: Mystical Golden Dust & Mist Particles Canvas -->
+    <canvas id="hero-particles-canvas" style="
+        position:absolute;inset:0;width:100%;height:100%;
+        pointer-events:none;z-index:4;
+    "></canvas>
+
+    <!-- Layer 4: Minimalist Bottom Content & CTA Button (Unobstructed view of Krishna & Temple) -->
+    <div id="hero-banner-content" style="
+        position:absolute;top:50%;left:50%;transform:translate(-50%, -50%) translateZ(40px);
+        z-index:10;text-align:center;width:min(560px, 90vw);padding:14px 24px;
+        background:rgba(14,8,4,0.55);backdrop-filter:blur(14px);
+        border:1px solid rgba(212,168,64,0.3);border-radius:24px;
+        box-shadow:0 12px 40px rgba(0,0,0,0.6);
+        transition:transform 0.4s ease-out;
+    ">
+        <p style="
+            font-family:'Outfit',sans-serif;
+            font-size:0.62rem;letter-spacing:0.45em;text-transform:uppercase;
+            color:#F5DCA3;margin-bottom:4px;font-weight:600;
+        ">Explore Ithihaas</p>
+
+        <h1 style="
+            font-family:'Playfair Display',serif;
+            font-size:clamp(1.4rem,3vw,2.4rem);
+            font-weight:400;color:#FFF8EE;line-height:1.15;
+            margin-bottom:10px;
+            text-shadow:0 2px 10px rgba(0,0,0,0.8);
+        ">Journey Through Timeless Temples</h1>
+
+        <button id="startJourneyBtn" style="
+            display:inline-flex;align-items:center;gap:10px;
+            font-family:'Outfit',sans-serif;
+            font-size:0.75rem;letter-spacing:0.22em;text-transform:uppercase;
+            color:#0E0804;background:#D4A840;
+            padding:12px 32px;border:none;border-radius:30px;
+            cursor:pointer;
+            box-shadow:0 8px 25px rgba(0,0,0,0.5),0 0 25px rgba(212,168,64,0.4);
+            transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            font-weight:600;
+        " onmouseover="this.style.background='#F5DCA3';this.style.transform='translateY(-3px) scale(1.03)';"
+          onmouseout="this.style.background='#D4A840';this.style.transform='translateY(0) scale(1)';"
+        >
+            🛕 &nbsp; Let's Start the Journey &nbsp; →
+        </button>
+    </div>
+</div>
+
+<!-- Global Floating Contact Buttons (Phone & WhatsApp) -->
+<div id="static-contact-buttons" style="position:fixed;bottom:28px;right:28px;z-index:9999999;display:flex;gap:14px;align-items:center;pointer-events:auto;">
+    <a href="tel:+916369643150" title="Call Us (+91 6369643150)" style="width:58px;height:58px;background:#D4A840;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(212,168,64,0.65);text-decoration:none;font-size:26px;color:#1A0F0A;transition:transform 0.3s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">📞</a>
+    <a href="https://wa.me/916369643150" target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp" style="width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(37,211,102,0.65);text-decoration:none;transition:transform 0.3s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
